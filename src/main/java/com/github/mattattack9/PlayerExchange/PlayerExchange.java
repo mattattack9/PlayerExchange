@@ -6,13 +6,19 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-public class PlayerExchange extends JavaPlugin {
+public class PlayerExchange extends JavaPlugin implements Listener {
     private static final Logger log = Logger.getLogger("Minecraft");
     private static Economy econ = null;
     private static Permission perms = null;
     private static Chat chat = null;
+    FileConfiguration config = getConfig();
     @Override
     public void onEnable(){
         if (!setupEconomy() ) {
@@ -20,8 +26,20 @@ public class PlayerExchange extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+        config.addDefault("transactionLogging", true);
+        config.options().copyDefaults(true);
+        saveConfig();
+
         setupPermissions();
         setupChat();
+
+        getServer().getPluginManager().registerEvents(this, this);
+    }
+    // This method checks for incoming players and sends them a message
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        //TODO: Check for Player's Collectable Items/Money and Inform
     }
     @Override
     public void onDisable(){
