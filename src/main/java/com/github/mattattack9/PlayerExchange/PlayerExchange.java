@@ -15,10 +15,6 @@ public class PlayerExchange extends JavaPlugin {
     private static Chat chat = null;
     @Override
     public void onEnable(){
-        log.info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
-    }
-    @Override
-    public void onDisable(){
         if (!setupEconomy() ) {
             log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
@@ -26,6 +22,10 @@ public class PlayerExchange extends JavaPlugin {
         }
         setupPermissions();
         setupChat();
+    }
+    @Override
+    public void onDisable(){
+        log.info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
     }
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
