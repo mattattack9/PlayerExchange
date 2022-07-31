@@ -1,6 +1,8 @@
 package com.github.mattattack9.PlayerExchange;
 import java.util.logging.Logger;
 
+
+import com.mongodb.MongoClient;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -13,12 +15,34 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+
 public class PlayerExchange extends JavaPlugin implements Listener {
     private static final Logger log = Logger.getLogger("Minecraft");
     private static Economy econ = null;
     private static Permission perms = null;
     private static Chat chat = null;
     FileConfiguration config = getConfig();
+    private MongoClient mc;
+    private Morphia morphia;
+    private Datastore datastore;
+    private SellOfferDAO sellOfferDAO;
+    private BuyOfferDAO buyOfferDAO;
+
+    public void DatabaseHandler(int i) {
+        mc = new MongoClient();
+        morphia = new Morphia();
+        morphia.map(SellOffer.class);
+        morphia.map(BuyOffer.class);
+
+        datastore = morphia.createDatastore(mc,"dbName");
+        datastore.ensureIndexes();
+
+        sellOfferDAO = new SellOfferDAO(SellOffer.class, datastore);
+        buyOfferDAO = new BuyOfferDAO(BuyOffer.class, datastore);
+    }
+
     @Override
     public void onEnable(){
         if (!setupEconomy() ) {
