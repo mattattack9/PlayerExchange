@@ -21,15 +21,40 @@ public class SellOffer {
     @Indexed
     public String username;
 
+    @Indexed
+    public String playerUUID;
+
     public Material item;
 
     public int amount;
 
-    public float price;
+    public double price;
 
     public Date time;
 
     public SellOffer(){
 
+    }
+    public void setUsername(String name){
+        username = name;
+    }
+
+    public void setItem(Material newitem){
+        item = newitem;
+    }
+
+    public void setAmount(int damount){
+        amount = damount;
+    }
+
+    public void setPrice(double dprice){
+        price = dprice;
+    }
+
+    public void setTime(Date dtime){
+        time = dtime;
+    }
+    public void setPlayerUUID(String puuid){
+        playerUUID = puuid;
     }
 }

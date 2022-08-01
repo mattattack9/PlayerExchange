@@ -9,6 +9,9 @@ public class SellOfferDAO extends BasicDAO<SellOffer, String> {
     public List<SellOffer> getAllSellOffers() {
         return this.find().asList();
     }
+    public void saveSellOffer(SellOffer offer) {
+        this.save(offer);
+    }
     public SellOfferDAO(Class<SellOffer> entityClass, Datastore ds){
         super(entityClass, ds);
     }

@@ -25,7 +25,7 @@ public class BuyOffer {
 
     public int amount;
 
-    public float price;
+    public double price;
 
     public Date time;
 

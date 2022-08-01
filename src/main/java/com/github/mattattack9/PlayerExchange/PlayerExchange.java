@@ -15,8 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
+
 
 public class PlayerExchange extends JavaPlugin implements Listener {
     private static final Logger log = Logger.getLogger("Minecraft");
@@ -24,27 +23,12 @@ public class PlayerExchange extends JavaPlugin implements Listener {
     private static Permission perms = null;
     private static Chat chat = null;
     FileConfiguration config = getConfig();
-    private MongoClient mc;
-    private Morphia morphia;
-    private Datastore datastore;
-    private SellOfferDAO sellOfferDAO;
-    private BuyOfferDAO buyOfferDAO;
-
-    public void DatabaseHandler(int i) {
-        mc = new MongoClient();
-        morphia = new Morphia();
-        morphia.map(SellOffer.class);
-        morphia.map(BuyOffer.class);
-
-        datastore = morphia.createDatastore(mc,"dbName");
-        datastore.ensureIndexes();
-
-        sellOfferDAO = new SellOfferDAO(SellOffer.class, datastore);
-        buyOfferDAO = new BuyOfferDAO(BuyOffer.class, datastore);
-    }
 
     @Override
     public void onEnable(){
+        DatabaseHandler db = new DatabaseHandler();
+        db.InitializeDatabase();
+        this.getCommand("pe").setExecutor(new CommandPE(db));
         if (!setupEconomy() ) {
             log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);

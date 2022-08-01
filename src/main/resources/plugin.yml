@@ -1,3 +1,8 @@
 name: PlayerExchange
 version: 1.0
 main: com.gmail.matthewbuker.PlayerExchange
+commands:
+  pe:
+    description: Allows for access to the Player Exchange
+    usage: /pe (buy/sell/collect/list/cancel)
+    permission: playerexchange.pe-access
